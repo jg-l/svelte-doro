@@ -6,7 +6,7 @@
   // Presets
 
   let presets = [
-    { name: "Work", seconds: 5, isRest: false },
+    { name: "Work", seconds: 1500, isRest: false },
     { name: "Long Work", seconds: 2700, isRest: false },
     { name: "Rest", seconds: 500, isRest: true },
     { name: "Long Rest", seconds: 1800, isRest: true }
