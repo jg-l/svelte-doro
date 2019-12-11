@@ -11,6 +11,8 @@ A simple traditional Pomodoro timer implented in svelte.js and bulma css!
 
 ## See the demo here
 
+![preview](preview.png)
+
 [Live Demo](https://jg-l.github.io/svelte-doro/)
 
 ## Hosting the app
