@@ -11,7 +11,7 @@ export function sec2time(timeInSeconds) {
     return pad(minutes, 2) + ":" + pad(seconds, 2);
 }
 
-export function notifyMe() {
+export function notifyMe(msg) {
     // Let's check if the browser supports notifications
     if (!("Notification" in window)) {
         alert("This browser does not support desktop notification");
@@ -20,7 +20,7 @@ export function notifyMe() {
     // Let's check whether notification permissions have already been granted
     else if (Notification.permission === "granted") {
         // If it's okay let's create a notification
-        var notification = new Notification(`${selected.name} period is done!`);
+        var notification = new Notification(msg);
     }
 
     // Otherwise, we need to ask the user for permission
@@ -28,9 +28,7 @@ export function notifyMe() {
         Notification.requestPermission().then(function (permission) {
             // If the user accepts, let's create a notification
             if (permission === "granted") {
-                var notification = new Notification(
-                    `${selected.name} period is done!`
-                );
+                var notification = new Notification(msg);
             }
         });
     }

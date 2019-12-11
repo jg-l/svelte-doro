@@ -54,7 +54,7 @@
         if (!isRest) {
           // This wasn't rest; increasee pomodoro
           completedPomodoros += 1;
-          notifyMe();
+          notifyMe(`${selected.name} period is done!`);
         }
       }
     }
