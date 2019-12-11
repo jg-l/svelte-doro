@@ -1,6 +1,6 @@
 <script>
   import { onDestroy } from "svelte";
-  import { sec2time } from "./utils.js";
+  import { sec2time, notifyMe } from "./utils.js";
   import "bulma/css/bulma.css";
 
   // Presets
@@ -34,6 +34,17 @@
     seconds = selected.seconds;
   }
 
+  // notifications on?
+  $: isNotificationOn = Notification.permission === "granted" ? true : false;
+  let notificationsOn = false;
+
+  async function handleNotificationRequest() {
+    await Notification.requestPermission();
+    if (Notification.permission === "granted") {
+      notificationsOn = true;
+    }
+  }
+
   const interval = setInterval(() => {
     if (isStarted && seconds > 0) {
       console.log(seconds);
@@ -43,6 +54,7 @@
         if (!isRest) {
           // This wasn't rest; increasee pomodoro
           completedPomodoros += 1;
+          notifyMe();
         }
       }
     }
@@ -63,12 +75,19 @@
 </style>
 
 <div class="container is-fluid" style="max-width: 450px;">
-  <div class="content">
-    <p class="is-small has-text-weight-light">What is Pomodoro?</p>
+  <div class="field has-addons">
+    <p class="control">
+      <button class="button is-small" on:click={handleNotificationRequest}>
+        <span class="icon">
+          {isNotificationOn || notificationsOn ? '✔️' : '❌'}
+        </span>
+        <span>Notifications</span>
+      </button>
+    </p>
   </div>
-  <div class="box" style="padding: 2.20rem;">
-    <div class="columns ">
-      <div class="column">
+  <div class="columns ">
+    <div class="column">
+      <div class="box">
         <div class="level">
           <div class="level-item">
             <progress
@@ -81,7 +100,7 @@
         </div>
         <div class="level">
           <div class="level-item content">
-            <p class="subtitle is-2 is-family-monospace">{display}</p>
+            <p class="subtitle is-1 has-text-weight-light ">{display}</p>
           </div>
         </div>
         <div class="level">
@@ -92,42 +111,42 @@
             </span>
           </div>
         </div>
-        <div class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <div class="field">
-                <div class="control">
-                  <div class="select">
-                    <select bind:value={selected}>
-                      {#each presets as preset}
-                        <option value={preset}>{preset.name}</option>
-                      {/each}
-                    </select>
-                  </div>
+      </div>
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <div class="field">
+              <div class="control">
+                <div class="select">
+                  <select bind:value={selected}>
+                    {#each presets as preset}
+                      <option value={preset}>{preset.name}</option>
+                    {/each}
+                  </select>
                 </div>
               </div>
             </div>
           </div>
-          <div class="level-right">
-            <div class="level-item">
-              <div class="field is-grouped">
-                <p class="control">
-                  <button
-                    disabled={seconds === 0 ? 'disabled' : ''}
-                    class="button {isStarted ? 'is-danger' : 'is-success'}"
-                    on:click={() => (isStarted = !isStarted)}>
-                    {isStarted ? 'Stop' : 'Start'}
-                  </button>
-                </p>
-                <p class="control">
-                  <button class="button" on:click={handleReset}>Reset</button>
-                </p>
-              </div>
+        </div>
+        <div class="level-right">
+          <div class="level-item">
+            <div class="field is-grouped">
+              <p class="control">
+                <button
+                  disabled={seconds === 0 ? 'disabled' : ''}
+                  class="button {isStarted ? 'is-danger' : 'is-success'}"
+                  on:click={() => (isStarted = !isStarted)}>
+                  {isStarted ? 'Stop' : 'Start'}
+                </button>
+              </p>
+              <p class="control">
+                <button class="button" on:click={handleReset}>Reset</button>
+              </p>
             </div>
           </div>
         </div>
       </div>
-
     </div>
+
   </div>
 </div>
