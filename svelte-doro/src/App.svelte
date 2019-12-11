@@ -1,18 +1,16 @@
 <script>
   import { onDestroy } from "svelte";
 
-  let seconds = 600;
+  let seconds = 182600;
   let started = false;
 
   $: display = sec2time(seconds);
 
-  function toPretty(s) {
-    var a = new Date(s);
-    return a
-      .toISOString()
-      .substr(11, 8)
-      .toString();
+  function handleReset() {
+    started = false;
+    seconds = 0;
   }
+
   function sec2time(timeInSeconds) {
     var pad = function(num, size) {
         return ("000" + num).slice(size * -1);
@@ -29,8 +27,6 @@
   const interval = setInterval(() => {
     if (started) {
       seconds -= 1;
-      display = toPretty(seconds);
-      display = display;
     }
   }, 1000);
 
@@ -43,4 +39,4 @@
 <button on:click={() => (started = !started)}>
   {started ? 'Stop' : 'Start'}
 </button>
-<button on:click={() => (seconds = 0)}>Reset</button>
+<button on:click={handleReset}>Reset</button>
